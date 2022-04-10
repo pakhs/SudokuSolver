@@ -28,6 +28,14 @@ class Board:
     def __init__(self, board, interactive):
         self.board = board
         self.inter = interactive
+        self.color = []
+        for i in range(9):
+            self.color.append([])
+            for j in range(9):
+                if self.board[i][j] == 0:
+                    self.color[i].append(True)
+                else:
+                    self.color[i].append(False)
     def print(self):
         board = self.board
         print("         SUDOKU BOARD")
@@ -81,16 +89,17 @@ class Board:
             for j in range(len(board[i])):
                 if j % 3 == 0:
                     print(" | ", end="")
+                color = Fore.GREEN if self.color[i][j] and self.board[i][j] != 0 else ""
                 if j == 8:
                     if (row,col) == (i,j):
                         print(Fore.YELLOW + str(board[i][j]) + Fore.WHITE + ' |')
                     else:
-                        print(str(board[i][j]) + ' |')
+                        print(color + str(board[i][j]) + Fore.WHITE + ' |')
                 else:
                     if (row,col) == (i,j):
                         print(Fore.YELLOW + str(board[i][j]) + Fore.WHITE + " ", end = "")
                     else:
-                        print(str(board[i][j]) + " ", end="")
+                        print(color + str(board[i][j]) + Fore.WHITE + " ", end="")
     def solve(self):
         (row,col) = self.find_next_empty()
         if (row,col) == (-1,-1):
@@ -102,7 +111,7 @@ class Board:
                 if self.inter:
                     os.system("clear")
                     self.printInSolve((row,col))
-                    os.system("sleep 0.09")
+                    os.system("sleep 0.11")
                 if self.solve():
                     return True
                 self.board[row][col] = 0
